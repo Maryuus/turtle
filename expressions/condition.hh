@@ -1,22 +1,34 @@
-#pragma once
+#ifndef CONDITION_HH
+#define CONDITION_HH
 
-#include <memory> // <--- C'est cette ligne qui manquait souvent !
+#include <memory>
 #include "contexte.hh"
 
-class Driver; // Forward declaration pour éviter les inclusions cycliques
+class Driver;
 
 class Condition {
 public:
     virtual ~Condition() = default;
 
-    // Ancienne méthode (pour compatibilité)
-    virtual bool calculer(const Contexte &) const { return false; }
-
-    // Nouvelle méthode utilisée par le Driver
+    // Méthode principale appelée par le Driver
     virtual bool calculer(const Contexte & ctx, Driver& driver) const {
-        return calculer(ctx);
+        return false;
     }
 };
 
-// C'est cette ligne qui définit ConditionPtr. Si elle manque, ExpressionTernaire plante.
 using ConditionPtr = std::shared_ptr<Condition>;
+
+// Ajout indispensable pour gérer "pas de mur", "pas vide", etc.
+class ConditionNot : public Condition {
+public:
+    ConditionNot(ConditionPtr condition) : _condition(condition) {}
+
+    bool calculer(const Contexte & ctx, Driver& driver) const override {
+        return !_condition->calculer(ctx, driver);
+    }
+
+private:
+    ConditionPtr _condition;
+};
+
+#endif

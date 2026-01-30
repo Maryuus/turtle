@@ -3,7 +3,6 @@
 
 #include <string>
 
-// Structure simple pour gérer des coordonnées précises
 struct PointF {
     float x;
     float y;
@@ -16,7 +15,8 @@ public:
     virtual void construction(std::string nom) = 0;
     virtual int nombreTortues() = 0;
 
-    // ON UTILISE MAINTENANT PointF (float) ET NON QPoint (int)
+    virtual void nouvelleTortue() = 0;
+
     virtual PointF position(int id) = 0;
     virtual float orientation(int id) = 0;
 

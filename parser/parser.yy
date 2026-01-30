@@ -41,7 +41,7 @@
 %token NL END END_OF_FILE
 %token AVANCE RECULE TOURNE SAUTE COULEUR TORTUES JARDIN FONCTION
 %token SI SINON TANT QUE REPETE
-%token MUR VIDE PAS DEVANT DERRIERE GAUCHE DROITE
+%token MUR VIDE PAS DEVANT DERRIERE GAUCHE DROITE FOIS
 %token DP AROBASE DOLLAR
 %token PLUS MOINS MULT DIV LPAR RPAR EGAL DIFFERENT INF SUP ET OU
 %token <double> NUMBER
@@ -101,13 +101,8 @@ instruction:
 
 unite_opt:
       /* vide */
-    | PAS
-    | VAR_NAME
-    ;
-
-unite_special:
-      /* vide */
-    | PAS
+    | FOIS
+    | VAR_NAME /* Au cas où l'utilisateur écrit "pas" pour "steps" ou autre mot */
     ;
 
 commande:
@@ -116,10 +111,11 @@ commande:
     | SAUTE expression unite_opt  { $$ = std::make_shared<CommandeMouvement>($2, TypeMouvement::SAUTE); }
     | TOURNE expression unite_opt { $$ = std::make_shared<CommandeMouvement>($2, TypeMouvement::TOURNE); }
 
-    | AVANCE unite_special { $$ = std::make_shared<CommandeMouvement>(std::make_shared<Constante>(1.0), TypeMouvement::AVANCE); }
-    | RECULE unite_special { $$ = std::make_shared<CommandeMouvement>(std::make_shared<Constante>(1.0), TypeMouvement::RECULE); }
-    | SAUTE unite_special  { $$ = std::make_shared<CommandeMouvement>(std::make_shared<Constante>(1.0), TypeMouvement::SAUTE); }
-    | TOURNE unite_special { $$ = std::make_shared<CommandeMouvement>(std::make_shared<Constante>(90.0), TypeMouvement::TOURNE); }
+    /* Commandes sans arguments (valeurs par défaut) */
+    | AVANCE { $$ = std::make_shared<CommandeMouvement>(std::make_shared<Constante>(1.0), TypeMouvement::AVANCE); }
+    | RECULE { $$ = std::make_shared<CommandeMouvement>(std::make_shared<Constante>(1.0), TypeMouvement::RECULE); }
+    | SAUTE  { $$ = std::make_shared<CommandeMouvement>(std::make_shared<Constante>(1.0), TypeMouvement::SAUTE); }
+    | TOURNE { $$ = std::make_shared<CommandeMouvement>(std::make_shared<Constante>(90.0), TypeMouvement::TOURNE); }
 
     | TOURNE direction  {
         double angle = ($2 == Direction::GAUCHE) ? -90.0 : 90.0;
@@ -133,9 +129,14 @@ commande:
          $$ = std::make_shared<CommandeMouvement>(angle, TypeMouvement::TOURNE);
     }
 
-    | TORTUES expression { $$ = std::make_shared<Bloc>(); }
+    | TORTUES expression {
+        /* Directive préprocesseur : exécutée immédiatement */
+        int nb = (int)$2->calculer(driver.getContexte());
+        driver.initTortues(nb);
+        $$ = std::make_shared<Bloc>(); /* On retourne un bloc vide pour l'AST */
+    }
     | COULEUR COLOR_HEX { $$ = std::make_shared<CommandeCouleur>($2[0], $2[1], $2[2]); }
-    | COULEUR VAR_NAME { $$ = std::make_shared<CommandeCouleur>(255, 0, 0); }
+    | COULEUR VAR_NAME { $$ = std::make_shared<CommandeCouleur>(255, 0, 0); } /* Couleur par defaut si erreur */
 
     | JARDIN VAR_NAME   { driver.nouveauJardin($2); $$ = std::make_shared<Bloc>(); }
     | VAR_NAME args_appel { $$ = std::make_shared<AppelFonction>($1, $2); }
@@ -169,23 +170,17 @@ args_appel:
 
 condition:
       condition_base { $$ = $1; }
-    | PAS condition_base { $$ = $2; }
+    | PAS condition { $$ = std::make_shared<ConditionNot>($2); }
     | condition ET condition { $$ = std::make_shared<ConditionBinaire>($1, $3, OperateurBinaireBool::et); }
     | condition OU condition { $$ = std::make_shared<ConditionBinaire>($1, $3, OperateurBinaireBool::ou); }
     | LPAR condition RPAR { $$ = $2; }
     ;
 
-/* C'EST ICI QU'ON AJOUTE LES RÈGLES POUR @expression */
 condition_base:
       MUR direction { $$ = std::make_shared<ConditionCapteur>(TypeCapteur::MUR, $2); }
     | VIDE direction { $$ = std::make_shared<ConditionCapteur>(TypeCapteur::VIDE, $2); }
-    | PAS MUR direction { $$ = std::make_shared<ConditionCapteur>(TypeCapteur::VIDE, $3); }
-    | PAS VIDE direction { $$ = std::make_shared<ConditionCapteur>(TypeCapteur::MUR, $3); }
-
     | MUR direction AROBASE expression { $$ = std::make_shared<ConditionCapteur>(TypeCapteur::MUR, $2, $4); }
     | VIDE direction AROBASE expression { $$ = std::make_shared<ConditionCapteur>(TypeCapteur::VIDE, $2, $4); }
-    | PAS MUR direction AROBASE expression { $$ = std::make_shared<ConditionCapteur>(TypeCapteur::VIDE, $3, $5); }
-    | PAS VIDE direction AROBASE expression { $$ = std::make_shared<ConditionCapteur>(TypeCapteur::MUR, $3, $5); }
 
     | expression EGAL expression { $$ = std::make_shared<TestBinaire>($1, $3, OperateurBool::egal); }
     | expression DIFFERENT expression { $$ = std::make_shared<TestBinaire>($1, $3, OperateurBool::different); }

@@ -529,25 +529,26 @@ namespace yy {
     DERRIERE = 278,                // DERRIERE
     GAUCHE = 279,                  // GAUCHE
     DROITE = 280,                  // DROITE
-    DP = 281,                      // DP
-    AROBASE = 282,                 // AROBASE
-    DOLLAR = 283,                  // DOLLAR
-    PLUS = 284,                    // PLUS
-    MOINS = 285,                   // MOINS
-    MULT = 286,                    // MULT
-    DIV = 287,                     // DIV
-    LPAR = 288,                    // LPAR
-    RPAR = 289,                    // RPAR
-    EGAL = 290,                    // EGAL
-    DIFFERENT = 291,               // DIFFERENT
-    INF = 292,                     // INF
-    SUP = 293,                     // SUP
-    ET = 294,                      // ET
-    OU = 295,                      // OU
-    NUMBER = 296,                  // NUMBER
-    VAR_NAME = 297,                // VAR_NAME
-    COLOR_HEX = 298,               // COLOR_HEX
-    NEG = 299                      // NEG
+    FOIS = 281,                    // FOIS
+    DP = 282,                      // DP
+    AROBASE = 283,                 // AROBASE
+    DOLLAR = 284,                  // DOLLAR
+    PLUS = 285,                    // PLUS
+    MOINS = 286,                   // MOINS
+    MULT = 287,                    // MULT
+    DIV = 288,                     // DIV
+    LPAR = 289,                    // LPAR
+    RPAR = 290,                    // RPAR
+    EGAL = 291,                    // EGAL
+    DIFFERENT = 292,               // DIFFERENT
+    INF = 293,                     // INF
+    SUP = 294,                     // SUP
+    ET = 295,                      // ET
+    OU = 296,                      // OU
+    NUMBER = 297,                  // NUMBER
+    VAR_NAME = 298,                // VAR_NAME
+    COLOR_HEX = 299,               // COLOR_HEX
+    NEG = 300                      // NEG
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -564,7 +565,7 @@ namespace yy {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 45, ///< Number of tokens.
+        YYNTOKENS = 46, ///< Number of tokens.
         S_YYEMPTY = -2,
         S_YYEOF = 0,                             // "end of file"
         S_YYerror = 1,                           // error
@@ -592,33 +593,33 @@ namespace yy {
         S_DERRIERE = 23,                         // DERRIERE
         S_GAUCHE = 24,                           // GAUCHE
         S_DROITE = 25,                           // DROITE
-        S_DP = 26,                               // DP
-        S_AROBASE = 27,                          // AROBASE
-        S_DOLLAR = 28,                           // DOLLAR
-        S_PLUS = 29,                             // PLUS
-        S_MOINS = 30,                            // MOINS
-        S_MULT = 31,                             // MULT
-        S_DIV = 32,                              // DIV
-        S_LPAR = 33,                             // LPAR
-        S_RPAR = 34,                             // RPAR
-        S_EGAL = 35,                             // EGAL
-        S_DIFFERENT = 36,                        // DIFFERENT
-        S_INF = 37,                              // INF
-        S_SUP = 38,                              // SUP
-        S_ET = 39,                               // ET
-        S_OU = 40,                               // OU
-        S_NUMBER = 41,                           // NUMBER
-        S_VAR_NAME = 42,                         // VAR_NAME
-        S_COLOR_HEX = 43,                        // COLOR_HEX
-        S_NEG = 44,                              // NEG
-        S_YYACCEPT = 45,                         // $accept
-        S_root = 46,                             // root
-        S_programme = 47,                        // programme
-        S_definition_fonction = 48,              // definition_fonction
-        S_liste_instructions = 49,               // liste_instructions
-        S_instruction = 50,                      // instruction
-        S_unite_opt = 51,                        // unite_opt
-        S_unite_special = 52,                    // unite_special
+        S_FOIS = 26,                             // FOIS
+        S_DP = 27,                               // DP
+        S_AROBASE = 28,                          // AROBASE
+        S_DOLLAR = 29,                           // DOLLAR
+        S_PLUS = 30,                             // PLUS
+        S_MOINS = 31,                            // MOINS
+        S_MULT = 32,                             // MULT
+        S_DIV = 33,                              // DIV
+        S_LPAR = 34,                             // LPAR
+        S_RPAR = 35,                             // RPAR
+        S_EGAL = 36,                             // EGAL
+        S_DIFFERENT = 37,                        // DIFFERENT
+        S_INF = 38,                              // INF
+        S_SUP = 39,                              // SUP
+        S_ET = 40,                               // ET
+        S_OU = 41,                               // OU
+        S_NUMBER = 42,                           // NUMBER
+        S_VAR_NAME = 43,                         // VAR_NAME
+        S_COLOR_HEX = 44,                        // COLOR_HEX
+        S_NEG = 45,                              // NEG
+        S_YYACCEPT = 46,                         // $accept
+        S_root = 47,                             // root
+        S_programme = 48,                        // programme
+        S_definition_fonction = 49,              // definition_fonction
+        S_liste_instructions = 50,               // liste_instructions
+        S_instruction = 51,                      // instruction
+        S_unite_opt = 52,                        // unite_opt
         S_commande = 53,                         // commande
         S_structure_controle = 54,               // structure_controle
         S_args_appel = 55,                       // args_appel
@@ -1500,6 +1501,21 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
+      make_FOIS (location_type l)
+      {
+        return symbol_type (token::FOIS, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_FOIS (const location_type& l)
+      {
+        return symbol_type (token::FOIS, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
       make_DP (location_type l)
       {
         return symbol_type (token::DP, std::move (l));
@@ -1834,7 +1850,7 @@ switch (yykind)
     static const signed char yydefact_[];
 
     // YYPGOTO[NTERM-NUM].
-    static const short yypgoto_[];
+    static const signed char yypgoto_[];
 
     // YYDEFGOTO[NTERM-NUM].
     static const signed char yydefgoto_[];
@@ -2086,8 +2102,8 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 301,     ///< Last index in yytable_.
-      yynnts_ = 15,  ///< Number of nonterminal symbols.
+      yylast_ = 259,     ///< Last index in yytable_.
+      yynnts_ = 14,  ///< Number of nonterminal symbols.
       yyfinal_ = 3 ///< Termination state number.
     };
 
@@ -2100,7 +2116,7 @@ switch (yykind)
 
 
 } // yy
-#line 2104 "parser/parser.hh"
+#line 2120 "parser/parser.hh"
 
 
 

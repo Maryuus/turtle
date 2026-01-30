@@ -5,6 +5,7 @@
 using token = yy::Parser::token;
 #undef  YY_DECL
 #define YY_DECL int Scanner::yylex( yy::Parser::semantic_type * const lval, yy::Parser::location_type *loc )
+// CORRECTION ICI : Tout doit être sur la même ligne ou avec un backslash
 #define YY_USER_ACTION loc->step(); loc->columns(yyleng);
 %}
 
@@ -28,6 +29,7 @@ using token = yy::Parser::token;
 "recule"    { return token::RECULE; }
 "tourne"    { return token::TOURNE; }
 "saute"     { return token::SAUTE; }
+"sauter"    { return token::SAUTE; }
 "couleur"   { return token::COULEUR; }
 "tortues"   { return token::TORTUES; }
 "jardin"    { return token::JARDIN; }
@@ -44,6 +46,7 @@ using token = yy::Parser::token;
 
 "pas"[ \t]+"de" { return token::PAS; }
 "pas"           { return token::PAS; }
+"fois"          { return token::FOIS; }
 
 "devant"    { return token::DEVANT; }
 "derriere"  { return token::DERRIERE; }
@@ -63,7 +66,6 @@ using token = yy::Parser::token;
     yylval->build<std::vector<double>>({(double)r, (double)g, (double)b});
     return token::COLOR_HEX;
 }
-"#".* { }
 
 "+" { return token::PLUS; }
 "-" { return token::MOINS; }

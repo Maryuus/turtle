@@ -28,8 +28,12 @@ public:
     ~Jardin() {}
 
     // --- Implémentation JardinRendering ---
-    void construction(std::string nom) override; // Charge le fichier .jdn
+    void construction(std::string nom) override;
     int nombreTortues() override;
+
+    // --- LIGNE AJOUTÉE ICI ---
+    void nouvelleTortue() override;
+    // -------------------------
 
     PointF position(int id) override;
     float orientation(int id) override;
@@ -50,10 +54,7 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    // Mémoire de l'image (les traits dessinés)
     QPixmap m_calqueDessin;
-
-    // Ressources graphiques
     QPixmap m_imgMur;
     QPixmap m_imgVide;
     QPixmap m_imgTortue;
@@ -61,9 +62,8 @@ private:
     JardinHandler* m_handler;
     QColor m_couleurCrayon;
 
-    // Données du monde
-    int m_largeur; // En nombre de cases
-    int m_hauteur; // En nombre de cases
+    int m_largeur;
+    int m_hauteur;
     std::vector<std::vector<TypeCase>> m_grille;
     std::vector<TortueInfo> m_tortues;
 };

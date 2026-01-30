@@ -11,9 +11,9 @@
 const int TILE_SIZE = 40;
 
 Jardin::Jardin(const std::string & titre, QWidget *parent)
-    : QWidget(parent), m_couleurCrayon(Qt::yellow), m_largeur(20), m_hauteur(15)
+: QWidget(parent), m_couleurCrayon(Qt::yellow), m_largeur(20), m_hauteur(15)
 {
-    setWindowTitle(QString::fromStdString(titre.empty() ? "Tortue - Map Reading Fix" : titre));
+    setWindowTitle(QString::fromStdString(titre.empty() ? "Tortue - Projet" : titre));
     m_handler = new JardinHandler(this);
 
     // Chargement Images
@@ -39,7 +39,7 @@ Jardin::Jardin(const std::string & titre, QWidget *parent)
 
 JardinHandler* Jardin::getHandler() { return m_handler; }
 
-// --- C'EST ICI QUE CA CHANGE (LECTURE LIGNE PAR LIGNE) ---
+// --- LECTURE DU FICHIER JARDIN ---
 void Jardin::construction(std::string nom) {
     std::cout << "[Jardin] Lecture du fichier : " << nom << std::endl;
     std::ifstream file(nom);
@@ -51,8 +51,7 @@ void Jardin::construction(std::string nom) {
     // 1. Lire les dimensions
     file >> m_largeur >> m_hauteur;
 
-    // IMPORTANT : Après avoir lu un nombre, le curseur est juste avant le retour à la ligne.
-    // Il faut "manger" ce retour à la ligne pour passer à la grille.
+    // "Manger" le retour à la ligne après les dimensions
     std::string dummy;
     std::getline(file, dummy);
 
@@ -61,20 +60,19 @@ void Jardin::construction(std::string nom) {
     m_grille.resize(m_hauteur, std::vector<TypeCase>(m_largeur, TypeCase::VIDE));
     m_tortues.clear();
 
-    // 2. Lecture LIGNE par LIGNE (pour préserver les espaces)
+    // 2. Lecture LIGNE par LIGNE
     for(int y = 0; y < m_hauteur; ++y) {
         std::string ligne;
-        std::getline(file, ligne); // Lit toute la ligne, y compris les espaces !
+        std::getline(file, ligne);
 
         for(int x = 0; x < m_largeur; ++x) {
-            // Sécurité : si la ligne est trop courte dans le fichier, on considère du vide
             char c = (x < (int)ligne.size()) ? ligne[x] : ' ';
 
             if (c == 'M' || c == '*') {
                 m_grille[y][x] = TypeCase::MUR;
             } else if (c == 'T') {
                 m_grille[y][x] = TypeCase::VIDE;
-                // Création d'une tortue
+                // Création d'une tortue trouvée sur la carte
                 TortueInfo t;
                 t.x = x; t.y = y; t.angle = -90;
                 t.couleur = Qt::red;
@@ -200,4 +198,17 @@ void Jardin::paintEvent(QPaintEvent *) {
         }
         painter.restore();
     }
+}
+
+// --- AJOUT DE LA FONCTION MANQUANTE ---
+void Jardin::nouvelleTortue() {
+    TortueInfo t;
+    t.x = 0.0f;       // Commence à gauche (0,0)
+    t.y = 0.0f;
+    t.angle = -90.0f; // Regarde vers le haut
+    t.couleur = Qt::red;
+    t.visible = true;
+
+    m_tortues.push_back(t);
+    update(); // Rafraichissement
 }
