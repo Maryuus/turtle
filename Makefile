@@ -69,7 +69,6 @@ SOURCES       = parser/main.cc \
 		expressions/expressionTernaire.cc \
 		expressions/conditionBinaire.cc \
 		expressions/testBinaire.cc moc_jardinHandler.cpp \
-		moc_jardinRendering.cpp \
 		moc_jardin.cpp
 OBJECTS       = main.o \
 		driver.o \
@@ -89,7 +88,6 @@ OBJECTS       = main.o \
 		conditionBinaire.o \
 		testBinaire.o \
 		moc_jardinHandler.o \
-		moc_jardinRendering.o \
 		moc_jardin.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -420,58 +418,33 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -std=c++17 -O2 -std=gnu++1z -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_jardinHandler.cpp moc_jardinRendering.cpp moc_jardin.cpp
+compiler_moc_header_make_all: moc_jardinHandler.cpp moc_jardin.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_jardinHandler.cpp moc_jardinRendering.cpp moc_jardin.cpp
+	-$(DEL_FILE) moc_jardinHandler.cpp moc_jardin.cpp
 moc_jardinHandler.cpp: GUI/jardinHandler.hh \
 		parser/parser.hh \
 		expressions/contexte.hh \
 		expressions/expression.hh \
 		expressions/expressionBinaire.hh \
+		expressions/types.hh \
 		expressions/expressionUnaire.hh \
 		expressions/constante.hh \
 		expressions/variable.hh \
 		expressions/instructions.hh \
 		expressions/condition.hh \
 		expressions/capteurs.hh \
-		expressions/types.hh \
 		expressions/conditionBinaire.hh \
 		expressions/testBinaire.hh \
 		parser/location.hh \
 		parser/scanner.hh \
 		parser/driver.hh \
 		GUI/jardinRendering.hh \
-		GUI/tortue.hh \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/marius/Nextcloud/marius/L3/théorie/tortueV4/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/marius/Nextcloud/marius/L3/théorie/tortueV4 -I/home/marius/Nextcloud/marius/L3/théorie/tortueV4/expressions -I/home/marius/Nextcloud/marius/L3/théorie/tortueV4/parser -I/home/marius/Nextcloud/marius/L3/théorie/tortueV4/GUI -I/home/marius/Nextcloud/marius/L3/théorie/tortueV4 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/14 -I/usr/include/x86_64-linux-gnu/c++/14 -I/usr/include/c++/14/backward -I/usr/lib/gcc/x86_64-linux-gnu/14/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include GUI/jardinHandler.hh -o moc_jardinHandler.cpp
 
-moc_jardinRendering.cpp: GUI/jardinRendering.hh \
-		GUI/tortue.hh \
-		moc_predefs.h \
-		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/marius/Nextcloud/marius/L3/théorie/tortueV4/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/marius/Nextcloud/marius/L3/théorie/tortueV4 -I/home/marius/Nextcloud/marius/L3/théorie/tortueV4/expressions -I/home/marius/Nextcloud/marius/L3/théorie/tortueV4/parser -I/home/marius/Nextcloud/marius/L3/théorie/tortueV4/GUI -I/home/marius/Nextcloud/marius/L3/théorie/tortueV4 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/14 -I/usr/include/x86_64-linux-gnu/c++/14 -I/usr/include/c++/14/backward -I/usr/lib/gcc/x86_64-linux-gnu/14/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include GUI/jardinRendering.hh -o moc_jardinRendering.cpp
-
 moc_jardin.cpp: GUI/jardin.hh \
 		GUI/jardinRendering.hh \
-		GUI/tortue.hh \
-		GUI/jardinHandler.hh \
-		parser/parser.hh \
-		expressions/contexte.hh \
-		expressions/expression.hh \
-		expressions/expressionBinaire.hh \
-		expressions/expressionUnaire.hh \
-		expressions/constante.hh \
-		expressions/variable.hh \
-		expressions/instructions.hh \
-		expressions/condition.hh \
-		expressions/capteurs.hh \
-		expressions/types.hh \
-		expressions/conditionBinaire.hh \
-		expressions/testBinaire.hh \
-		parser/location.hh \
-		parser/scanner.hh \
-		parser/driver.hh \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/marius/Nextcloud/marius/L3/théorie/tortueV4/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/marius/Nextcloud/marius/L3/théorie/tortueV4 -I/home/marius/Nextcloud/marius/L3/théorie/tortueV4/expressions -I/home/marius/Nextcloud/marius/L3/théorie/tortueV4/parser -I/home/marius/Nextcloud/marius/L3/théorie/tortueV4/GUI -I/home/marius/Nextcloud/marius/L3/théorie/tortueV4 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/14 -I/usr/include/x86_64-linux-gnu/c++/14 -I/usr/include/c++/14/backward -I/usr/lib/gcc/x86_64-linux-gnu/14/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include GUI/jardin.hh -o moc_jardin.cpp
@@ -496,10 +469,8 @@ main.o: parser/main.cc parser/driver.hh \
 		expressions/contexte.hh \
 		expressions/instructions.hh \
 		expressions/expression.hh \
-		expressions/condition.hh \
-		GUI/jardinRendering.hh \
-		GUI/tortue.hh \
 		expressions/types.hh \
+		expressions/condition.hh \
 		GUI/jardinHandler.hh \
 		parser/parser.hh \
 		expressions/expressionBinaire.hh \
@@ -511,6 +482,7 @@ main.o: parser/main.cc parser/driver.hh \
 		expressions/testBinaire.hh \
 		parser/location.hh \
 		parser/scanner.hh \
+		GUI/jardinRendering.hh \
 		GUI/jardin.hh
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o parser/main.cc
 
@@ -518,10 +490,8 @@ driver.o: parser/driver.cc parser/driver.hh \
 		expressions/contexte.hh \
 		expressions/instructions.hh \
 		expressions/expression.hh \
-		expressions/condition.hh \
-		GUI/jardinRendering.hh \
-		GUI/tortue.hh \
 		expressions/types.hh \
+		expressions/condition.hh \
 		GUI/jardinHandler.hh \
 		parser/parser.hh \
 		expressions/expressionBinaire.hh \
@@ -532,27 +502,26 @@ driver.o: parser/driver.cc parser/driver.hh \
 		expressions/conditionBinaire.hh \
 		expressions/testBinaire.hh \
 		parser/location.hh \
-		parser/scanner.hh
+		parser/scanner.hh \
+		GUI/jardinRendering.hh
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o driver.o parser/driver.cc
 
 parser.o: parser/parser.cc parser/parser.hh \
 		expressions/contexte.hh \
 		expressions/expression.hh \
 		expressions/expressionBinaire.hh \
+		expressions/types.hh \
 		expressions/expressionUnaire.hh \
 		expressions/constante.hh \
 		expressions/variable.hh \
 		expressions/instructions.hh \
 		expressions/condition.hh \
 		expressions/capteurs.hh \
-		expressions/types.hh \
 		expressions/conditionBinaire.hh \
 		expressions/testBinaire.hh \
 		parser/location.hh \
 		parser/scanner.hh \
-		parser/driver.hh \
-		GUI/jardinRendering.hh \
-		GUI/tortue.hh
+		parser/driver.hh
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o parser.o parser/parser.cc
 
 scanner.o: parser/scanner.cc parser/scanner.hh \
@@ -560,13 +529,13 @@ scanner.o: parser/scanner.cc parser/scanner.hh \
 		expressions/contexte.hh \
 		expressions/expression.hh \
 		expressions/expressionBinaire.hh \
+		expressions/types.hh \
 		expressions/expressionUnaire.hh \
 		expressions/constante.hh \
 		expressions/variable.hh \
 		expressions/instructions.hh \
 		expressions/condition.hh \
 		expressions/capteurs.hh \
-		expressions/types.hh \
 		expressions/conditionBinaire.hh \
 		expressions/testBinaire.hh \
 		parser/location.hh
@@ -580,41 +549,38 @@ jardinHandler.o: GUI/jardinHandler.cc GUI/jardinHandler.hh \
 		expressions/contexte.hh \
 		expressions/expression.hh \
 		expressions/expressionBinaire.hh \
+		expressions/types.hh \
 		expressions/expressionUnaire.hh \
 		expressions/constante.hh \
 		expressions/variable.hh \
 		expressions/instructions.hh \
 		expressions/condition.hh \
 		expressions/capteurs.hh \
-		expressions/types.hh \
 		expressions/conditionBinaire.hh \
 		expressions/testBinaire.hh \
 		parser/location.hh \
 		parser/scanner.hh \
 		parser/driver.hh \
-		GUI/jardinRendering.hh \
-		GUI/tortue.hh
+		GUI/jardinRendering.hh
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o jardinHandler.o GUI/jardinHandler.cc
 
-jardinRendering.o: GUI/jardinRendering.cc GUI/jardinRendering.hh \
-		GUI/tortue.hh
+jardinRendering.o: GUI/jardinRendering.cc GUI/jardinRendering.hh
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o jardinRendering.o GUI/jardinRendering.cc
 
 jardin.o: GUI/jardin.cc GUI/jardin.hh \
 		GUI/jardinRendering.hh \
-		GUI/tortue.hh \
 		GUI/jardinHandler.hh \
 		parser/parser.hh \
 		expressions/contexte.hh \
 		expressions/expression.hh \
 		expressions/expressionBinaire.hh \
+		expressions/types.hh \
 		expressions/expressionUnaire.hh \
 		expressions/constante.hh \
 		expressions/variable.hh \
 		expressions/instructions.hh \
 		expressions/condition.hh \
 		expressions/capteurs.hh \
-		expressions/types.hh \
 		expressions/conditionBinaire.hh \
 		expressions/testBinaire.hh \
 		parser/location.hh \
@@ -626,11 +592,9 @@ capteurs.o: expressions/capteurs.cc expressions/capteurs.hh \
 		expressions/condition.hh \
 		expressions/contexte.hh \
 		expressions/types.hh \
-		parser/driver.hh \
-		expressions/instructions.hh \
 		expressions/expression.hh \
-		GUI/jardinRendering.hh \
-		GUI/tortue.hh
+		parser/driver.hh \
+		expressions/instructions.hh
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o capteurs.o expressions/capteurs.cc
 
 contexte.o: expressions/contexte.cc expressions/contexte.hh
@@ -648,12 +612,14 @@ variable.o: expressions/variable.cc expressions/variable.hh \
 
 expressionBinaire.o: expressions/expressionBinaire.cc expressions/expressionBinaire.hh \
 		expressions/expression.hh \
-		expressions/contexte.hh
+		expressions/contexte.hh \
+		expressions/types.hh
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o expressionBinaire.o expressions/expressionBinaire.cc
 
 expressionUnaire.o: expressions/expressionUnaire.cc expressions/expressionUnaire.hh \
 		expressions/expression.hh \
-		expressions/contexte.hh
+		expressions/contexte.hh \
+		expressions/types.hh
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o expressionUnaire.o expressions/expressionUnaire.cc
 
 expressionTernaire.o: expressions/expressionTernaire.cc expressions/expressionTernaire.hh \
@@ -669,17 +635,14 @@ conditionBinaire.o: expressions/conditionBinaire.cc expressions/conditionBinaire
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o conditionBinaire.o expressions/conditionBinaire.cc
 
 testBinaire.o: expressions/testBinaire.cc expressions/testBinaire.hh \
-		expressions/expression.hh \
-		expressions/contexte.hh \
 		expressions/condition.hh \
+		expressions/contexte.hh \
+		expressions/expression.hh \
 		expressions/types.hh
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o testBinaire.o expressions/testBinaire.cc
 
 moc_jardinHandler.o: moc_jardinHandler.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_jardinHandler.o moc_jardinHandler.cpp
-
-moc_jardinRendering.o: moc_jardinRendering.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_jardinRendering.o moc_jardinRendering.cpp
 
 moc_jardin.o: moc_jardin.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_jardin.o moc_jardin.cpp

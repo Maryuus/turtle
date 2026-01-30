@@ -41,40 +41,44 @@ JardinHandler* Jardin::getHandler() { return m_handler; }
 
 // --- C'EST ICI QUE CA CHANGE (LECTURE LIGNE PAR LIGNE) ---
 void Jardin::construction(std::string nom) {
-    std::cout << "[Jardin] Lecture carte : " << nom << std::endl;
+    std::cout << "[Jardin] Lecture du fichier : " << nom << std::endl;
     std::ifstream file(nom);
     if (!file.is_open()) {
-        std::cerr << "Erreur: Fichier " << nom << " introuvable." << std::endl;
+        std::cerr << "Impossible d'ouvrir " << nom << std::endl;
         return;
     }
 
-    // 1. Lire dimensions
+    // 1. Lire les dimensions
     file >> m_largeur >> m_hauteur;
 
-    // 2. IMPORTANT : Consommer le saut de ligne qui reste après le nombre "hauteur"
+    // IMPORTANT : Après avoir lu un nombre, le curseur est juste avant le retour à la ligne.
+    // Il faut "manger" ce retour à la ligne pour passer à la grille.
     std::string dummy;
     std::getline(file, dummy);
 
+    // Reset de la grille
     m_grille.clear();
     m_grille.resize(m_hauteur, std::vector<TypeCase>(m_largeur, TypeCase::VIDE));
     m_tortues.clear();
 
-    // 3. Lire ligne par ligne pour PRESERVER LES ESPACES
-    for(int y=0; y<m_hauteur; ++y) {
+    // 2. Lecture LIGNE par LIGNE (pour préserver les espaces)
+    for(int y = 0; y < m_hauteur; ++y) {
         std::string ligne;
         std::getline(file, ligne); // Lit toute la ligne, y compris les espaces !
 
-        for(int x=0; x<m_largeur; ++x) {
-            char c = ' ';
-            // Sécurité si la ligne est plus courte que prévu
-            if (x < (int)ligne.size()) c = ligne[x];
+        for(int x = 0; x < m_largeur; ++x) {
+            // Sécurité : si la ligne est trop courte dans le fichier, on considère du vide
+            char c = (x < (int)ligne.size()) ? ligne[x] : ' ';
 
             if (c == 'M' || c == '*') {
                 m_grille[y][x] = TypeCase::MUR;
             } else if (c == 'T') {
                 m_grille[y][x] = TypeCase::VIDE;
+                // Création d'une tortue
                 TortueInfo t;
-                t.x = x; t.y = y; t.angle = -90; t.couleur = Qt::red; t.visible=true;
+                t.x = x; t.y = y; t.angle = -90;
+                t.couleur = Qt::red;
+                t.visible = true;
                 m_tortues.push_back(t);
             } else {
                 m_grille[y][x] = TypeCase::VIDE;
@@ -82,14 +86,19 @@ void Jardin::construction(std::string nom) {
         }
     }
 
+    // Tortue de secours si aucune n'est trouvée
     if (m_tortues.empty()) {
         TortueInfo t; t.x=0; t.y=0; t.angle=-90; t.couleur=Qt::red; t.visible=true;
         m_tortues.push_back(t);
     }
 
+    // Redimensionnement graphique
     resize(m_largeur * TILE_SIZE, m_hauteur * TILE_SIZE);
+
+    // Reset du calque de dessin
     m_calqueDessin = QPixmap(size());
     m_calqueDessin.fill(Qt::transparent);
+
     update();
 }
 
