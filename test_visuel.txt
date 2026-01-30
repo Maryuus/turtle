@@ -1,0 +1,9 @@
+couleur rouge
+avance 100
+tourne 90
+avance 100
+tourne 90
+avance 100
+tourne 90
+avance 100
+tourne 90

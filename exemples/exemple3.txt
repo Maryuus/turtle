@@ -1,0 +1,6 @@
+si mur devant :
+  tourne gauche
+sinon :
+  avance 1
+  tourne droite
+fin si

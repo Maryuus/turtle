@@ -1,0 +1,8 @@
+couleur #FF0000
+avance 2
+tourne 90
+avance 2
+tourne 90
+avance 2
+tourne 90
+avance 2

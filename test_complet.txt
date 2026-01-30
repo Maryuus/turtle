@@ -1,0 +1,12 @@
+jardin "carte.jdn"
+
+couleur #00FF00
+avance 2
+tourne droite
+
+couleur #FF0000
+avance 5
+tourne droite
+
+couleur #0000FF
+avance 2
